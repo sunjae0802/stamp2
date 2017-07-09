@@ -364,6 +364,8 @@ PdoTraceback (grid_t* gridPtr, grid_t* myGridPtr,
 void
 router_solve (void* argPtr)
 {
+    long threadId = thread_getId();
+
     router_solve_arg_t* routerArgPtr = (router_solve_arg_t*)argPtr;
     router_t* routerPtr = routerArgPtr->routerPtr;
     maze_t* mazePtr = routerArgPtr->mazePtr;

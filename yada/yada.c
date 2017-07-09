@@ -188,6 +188,8 @@ initializeWork (heap_t* workHeapPtr, mesh_t* meshPtr)
 static void
 process ()
 {
+    long myId = thread_getId();
+
     heap_t* workHeapPtr = global_workHeapPtr;
     mesh_t* meshPtr = global_meshPtr;
     region_t* regionPtr;

@@ -1227,6 +1227,8 @@ TMfindBestReverseTask (learner_task_t * dest,  findBestTaskArg_t* argPtr)
 void
 learnStructure (void* argPtr)
 {
+    long myId = thread_getId();
+
     learner_t* learnerPtr = (learner_t*)argPtr;
     net_t* netPtr = learnerPtr->netPtr;
     adtree_t* adtreePtr = learnerPtr->adtreePtr;
