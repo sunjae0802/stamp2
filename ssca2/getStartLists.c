@@ -117,14 +117,14 @@ getStartLists (void* argPtr)
         }
     }
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       //long tmp_maxWeight = (long)TM_SHARED_READ(global_maxWeight);
       //if (maxWeight > tmp_maxWeight)
       // TM_SHARED_WRITE(global_maxWeight, maxWeight);
 
       if (maxWeight > global_maxWeight)
         global_maxWeight = maxWeight;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 

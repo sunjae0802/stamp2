@@ -204,10 +204,10 @@ processPackets (void* argPtr)
     while (1) {
 
         char* bytes;
-        __transaction_atomic {
+        TM_BEGIN(threadId); {
           //[wer210] TMQUEUE_POP(streamPtr->packetQueuePtr);
           bytes = TMSTREAM_GETPACKET(streamPtr);
-        }
+        } TM_END(threadId);
         if (!bytes) {
             break;
         }
@@ -216,11 +216,11 @@ processPackets (void* argPtr)
         long flowId = packetPtr->flowId;
 
         error_t error;
-        __transaction_atomic {
+        TM_BEGIN(threadId); {
           error = TMDECODER_PROCESS(decoderPtr,
                                     bytes,
                                     (PACKET_HEADER_LENGTH + packetPtr->length));
-        }
+        } TM_END(threadId);
         //TMprint("2.\n");
         if (error) {
             /*
@@ -233,9 +233,9 @@ processPackets (void* argPtr)
 
         char* data;
         long decodedFlowId;
-        __transaction_atomic {
+        TM_BEGIN(threadId); {
           data = TMDECODER_GETCOMPLETE(decoderPtr, &decodedFlowId);
-        }
+        } TM_END(threadId);
         //TMprint("3.\n");
         if (data) {
             error_t error = PDETECTOR_PROCESS(detectorPtr, data);

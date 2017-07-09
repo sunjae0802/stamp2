@@ -527,11 +527,11 @@ cutClusters (void* argPtr)
             global_iter = iter;
         }
 
-        __transaction_atomic {
+        TM_BEGIN(myId); {
           long tmp_cliqueSize = (long)TM_SHARED_READ(global_cliqueSize);
           TM_SHARED_WRITE(global_cliqueSize, (tmp_cliqueSize + cliqueSize));
           //global_cliqueSize += cliqueSize;
-        }
+        } TM_END(myId);
 
         thread_barrier_wait();
 
@@ -600,11 +600,11 @@ cutClusters (void* argPtr)
         }
     }
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       //long tmp_cutSetIndex = (long)TM_SHARED_READ(global_cutSetIndex);
       //TM_SHARED_WRITE(global_cutSetIndex, (tmp_cutSetIndex + cutSetIndex));
       global_cutSetIndex += cutSetIndex;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 

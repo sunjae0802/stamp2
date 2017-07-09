@@ -164,29 +164,29 @@ work (void* argPtr)
 
 
             /* Update new cluster centers : sum of objects located within */
-            __transaction_atomic {
+            TM_BEGIN(myId); {
               TM_SHARED_WRITE(*new_centers_len[index],
                               TM_SHARED_READ(*new_centers_len[index]) + 1);
               for (j = 0; j < nfeatures; j++) {
                 new_centers[index][j] += feature[i][j];
               }
-            }
+            } TM_END(myId);
         }
 
         /* Update task queue */
         if (start + CHUNK < npoints) {
-          __transaction_atomic {
+          TM_BEGIN(myId); {
             start = (int)TM_SHARED_READ(global_i);
             TM_SHARED_WRITE(global_i, (long)(start + CHUNK));
-          }
+          } TM_END(myId);
         } else {
             break;
         }
     }
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       TM_SHARED_WRITE_F(global_delta, TM_SHARED_READ_F(global_delta) + delta);
-    }
+    } TM_END(myId);
 
 
 }

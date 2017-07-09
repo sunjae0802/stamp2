@@ -201,18 +201,18 @@ process ()
 
         element_t* elementPtr;
 
-        __transaction_atomic {
+         TM_BEGIN(myId);{
           elementPtr = (element_t*)TMHEAP_REMOVE(workHeapPtr);
-        }
+        } TM_END(myId);
 
         if (elementPtr == NULL) {
             break;
         }
 
         bool_t isGarbage;
-        __transaction_atomic {
+        TM_BEGIN(myId); {
           isGarbage = TMELEMENT_ISGARBAGE(elementPtr);
-        }
+        } TM_END(myId);
         if (isGarbage) {
             /*
              * Handle delayed deallocation
@@ -225,20 +225,20 @@ process ()
         //[wer210] changed the control flow to get rid of self-abort
         bool_t success = TRUE;
         while (1) {
-          __transaction_atomic {
+          TM_BEGIN(myId); {
             // TM_SAFE: PVECTOR_CLEAR (regionPtr->badVectorPtr);
             PREGION_CLEARBAD(regionPtr);
             //[wer210] problematic function!
             numAdded = TMREGION_REFINE(regionPtr, elementPtr, meshPtr, &success);
             if (success) break;
-            else __transaction_cancel;
-          }
+            else TM_RESTART();
+          } TM_END(myId);
         }
 
-        __transaction_atomic {
+        TM_BEGIN(myId); {
           TMELEMENT_SETISREFERENCED(elementPtr, FALSE);
           isGarbage = TMELEMENT_ISGARBAGE(elementPtr);
-        }
+        } TM_END(myId);
         if (isGarbage) {
             /*
              * Handle delayed deallocation
@@ -248,20 +248,20 @@ process ()
 
         totalNumAdded += numAdded;
 
-        __transaction_atomic {
+        TM_BEGIN(myId); {
           TMREGION_TRANSFERBAD(regionPtr, workHeapPtr);
-        }
+        } TM_END(myId);
 
         numProcess++;
 
     }
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       TM_SHARED_WRITE(global_totalNumAdded,
                       TM_SHARED_READ(global_totalNumAdded) + totalNumAdded);
       TM_SHARED_WRITE(global_numProcess,
                       TM_SHARED_READ(global_numProcess) + numProcess);
-    }
+    } TM_END(myId);
 
     PREGION_FREE(regionPtr);
 }

@@ -385,13 +385,13 @@ router_solve (void* argPtr)
     while (1) {
 
         pair_t* coordinatePairPtr;
-        __transaction_atomic {
+        TM_BEGIN(threadId); {
           if (TMQUEUE_ISEMPTY(workQueuePtr)) {
             coordinatePairPtr = NULL;
           } else {
             coordinatePairPtr = (pair_t*)TMQUEUE_POP(workQueuePtr);
           }
-        }
+        } TM_END(threadId);
         if (coordinatePairPtr == NULL) {
             break;
         }
@@ -405,7 +405,7 @@ router_solve (void* argPtr)
         vector_t* pointVectorPtr = NULL;
 
 #if 0
-        __transaction_atomic {
+        TM_BEGIN(threadId); {
           grid_copy(myGridPtr, gridPtr); /* ok if not most up-to-date */
           if (PdoExpansion(routerPtr, myGridPtr, myExpansionQueuePtr,
                            srcPtr, dstPtr)) {
@@ -421,7 +421,7 @@ router_solve (void* argPtr)
               TM_LOCAL_WRITE(success, TRUE);
             }
           }
-        }
+        } TM_END(threadId);
 
 #endif
         //[wer210] change the control flow
@@ -438,9 +438,9 @@ router_solve (void* argPtr)
               // we've got a valid path.  Use a transaction to validate and finalize it
                 bool_t validity = FALSE;
 
-                __transaction_atomic {
+                TM_BEGIN(threadId); {
                   validity = TMGRID_ADDPATH(pointVectorPtr);
-                }
+                } TM_END(threadId);
 
               // if the operation was valid, we just finalized the path
               if (validity) {
@@ -481,9 +481,9 @@ router_solve (void* argPtr)
      * Add my paths to global list
      */
     list_t* pathVectorListPtr = routerArgPtr->pathVectorListPtr;
-    __transaction_atomic {
+    TM_BEGIN(threadId); {
       TMLIST_INSERT(pathVectorListPtr, (void*)myPathVectorPtr);
-    }
+    } TM_END(threadId);
 
     grid_free(myGridPtr);
     TMQUEUE_FREE(myExpansionQueuePtr);

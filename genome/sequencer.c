@@ -335,7 +335,7 @@ sequencer_run (void* argPtr)
     }
 
     for (i = i_start; i < i_stop; i+=CHUNK_STEP1) {
-      __transaction_atomic {
+      TM_BEGIN(threadId); {
         {
           long ii;
           long ii_stop = MIN(i_stop, (i+CHUNK_STEP1));
@@ -344,7 +344,7 @@ sequencer_run (void* argPtr)
             TMHASHTABLE_INSERT(uniqueSegmentsPtr, segment, segment);
           } /* ii */
         }
-      }
+      } TM_END(threadId);
     }
 
     thread_barrier_wait();
@@ -406,13 +406,13 @@ sequencer_run (void* argPtr)
             bool_t status;
 
             /* Find an empty constructEntries entry */
-            __transaction_atomic {
+            TM_BEGIN(threadId); {
               while (((void*)constructEntries[entryIndex].segment) != NULL) {
                 entryIndex = (entryIndex + 1) % numUniqueSegment; /* look for empty */
               }
               constructEntryPtr = &constructEntries[entryIndex];
               constructEntryPtr->segment = segment;
-            }
+            } TM_END(threadId);
             entryIndex = (entryIndex + 1) % numUniqueSegment;
 
             /*
@@ -432,11 +432,11 @@ sequencer_run (void* argPtr)
             for (j = 1; j < segmentLength; j++) {
                 startHash = (ulong_t)segment[j-1] +
                             (startHash << 6) + (startHash << 16) - startHash;
-                __transaction_atomic {
+                TM_BEGIN(threadId); {
                   status = TMTABLE_INSERT(startHashToConstructEntryTables[j],
                                           (ulong_t)startHash,
                                           (void*)constructEntryPtr );
-                }
+                } TM_END(threadId);
                 assert(status);
             }
 
@@ -445,11 +445,11 @@ sequencer_run (void* argPtr)
              */
             startHash = (ulong_t)segment[j-1] +
                         (startHash << 6) + (startHash << 16) - startHash;
-            __transaction_atomic {
+            TM_BEGIN(threadId); {
               status = TMTABLE_INSERT(hashToConstructEntryTable,
                                       (ulong_t)startHash,
                                       (void*)constructEntryPtr);
-            }
+            } TM_END(threadId);
             assert(status);
         }
     }
@@ -508,7 +508,7 @@ sequencer_run (void* argPtr)
                 long newLength = 0;
 
                 /* endConstructEntryPtr is local except for properties startPtr/endPtr/length */
-                __transaction_atomic {
+                TM_BEGIN(threadId); {
                   /* Check if matches */
                   if (TM_SHARED_READ(startConstructEntryPtr->isStart) &&
                       (TM_SHARED_READ_P(endConstructEntryPtr->startPtr) !=
@@ -547,7 +547,7 @@ sequencer_run (void* argPtr)
                     TM_SHARED_WRITE(endConstructEntry_startPtr->length, newLength);
                   } /* if (matched) */
 
-                } // TM_END
+                } TM_END(threadId);
 
                 /* if there was a match */
                 if (!endInfoEntries[entryIndex].isEnd)

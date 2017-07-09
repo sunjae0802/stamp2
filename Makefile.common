@@ -1,5 +1,5 @@
 # obj folder
-TMBUILD ?= obj
+TMBUILD ?= seq
 
 # ======== Defines ========
 CC	:= gcc
@@ -16,7 +16,7 @@ LDFLAGS  += -litm
 LIBDEPS  += 
 
 # ======== Rules ========
-OBJDIR = ../../$(TMBUILD)/$(PROG)/
+OBJDIR = ../build/$(TMBUILD)/$(PROG)/
 
 _OBJS = $(patsubst %,$(OBJDIR)/%,$(OBJS))
 _PROG = $(OBJDIR)/$(PROG)

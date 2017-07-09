@@ -180,13 +180,13 @@ computeGraph (void* argPtr)
         }
     }
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       //long tmp_maxNumVertices = (long)TM_SHARED_READ(global_maxNumVertices);
       //long new_maxNumVertices = MAX(tmp_maxNumVertices, maxNumVertices + 1);
       //TM_SHARED_WRITE(global_maxNumVertices, (unsigned long)new_maxNumVertices);
       if (global_maxNumVertices < maxNumVertices + 1)
         global_maxNumVertices = maxNumVertices + 1;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 
@@ -299,12 +299,12 @@ computeGraph (void* argPtr)
 
     thread_barrier_wait();
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       TM_SHARED_WRITE( global_outVertexListSize,
                        ((long)TM_SHARED_READ(global_outVertexListSize) + outVertexListSize));
 
       global_outVertexListSize += outVertexListSize;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 
@@ -475,7 +475,7 @@ computeGraph (void* argPtr)
                 }
             }
             if (k == GPtr->outVertexIndex[v]+GPtr->outDegree[v]) {
-              __transaction_atomic {
+              TM_BEGIN(myId); {
                 /* Add i to the impliedEdgeList of v */
 
                 long inDegree = (long)TM_SHARED_READ(GPtr->inDegree[v]);
@@ -497,7 +497,7 @@ computeGraph (void* argPtr)
                   }
                   TM_SHARED_WRITE(a[inDegree % MAX_CLUSTER_SIZE], (unsigned long)i);
                 }
-              } // TM_END
+              } TM_END(myId);
             }
         }
     } /* for i */

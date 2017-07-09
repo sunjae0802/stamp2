@@ -806,14 +806,14 @@ genScalData (void* argPtr)
         long t1 = PRANDOM_GENERATE(stream);
         long t = i + t1 % (TOT_VERTICES - i);
         if (t != i) {
-          __transaction_atomic {
+          TM_BEGIN(myId); {
             //unsigned long t2 = (unsigned long)TM_SHARED_READ(permV[t]);
             //TM_SHARED_WRITE(permV[t], TM_SHARED_READ(permV[i]));
             //TM_SHARED_WRITE(permV[i], t2);
             unsigned long temp = (unsigned long)permV[t];
             permV[t] = permV[i];
             permV[i] = temp;
-          }
+          } TM_END(myId);
         }
     }
 
@@ -1095,11 +1095,11 @@ genScalData (void* argPtr)
         }
     }
 
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       //TM_SHARED_WRITE(global_edgeNum,
       //                ((long)TM_SHARED_READ(global_edgeNum) + i_edgePtr));
       global_edgeNum += i_edgePtr;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 
@@ -1313,11 +1313,11 @@ genScalData (void* argPtr)
             i_edgeStartCounter[i] = i_edgeEndCounter[i-1];
         }
     }
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       //TM_SHARED_WRITE(global_edgeNum,
       //                ((long)TM_SHARED_READ(global_edgeNum) + i_edgePtr));
       global_edgeNum += i_edgePtr;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 
@@ -1394,11 +1394,11 @@ genScalData (void* argPtr)
             }
         }
     }
-    __transaction_atomic {
+    TM_BEGIN(myId); {
       //TM_SHARED_WRITE(global_numStrWtEdges,
       //                ((long)TM_SHARED_READ(global_numStrWtEdges) + numStrWtEdges));
       global_numStrWtEdges += numStrWtEdges;
-    }
+    } TM_END(myId);
 
     thread_barrier_wait();
 

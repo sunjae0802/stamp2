@@ -3,6 +3,13 @@
 
 #include <stdlib.h>                   /* Defines size_t. */
 
+#define TM_STARTUP(numThread)         /* nothing */
+#define TM_SHUTDOWN()                 /* nothing */
+
+#define TM_BEGIN(_threadId)           __transaction_atomic {
+#define TM_END(_threadId)             }
+#define TM_RESTART()                  __transaction_cancel
+
 #define TM_PURE                       __attribute__((transaction_pure))
 #define TM_SAFE                       __attribute__((transaction_safe))
 

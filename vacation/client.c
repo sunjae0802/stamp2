@@ -193,7 +193,7 @@ client_run (void* argPtr)
                 bool_t done = TRUE;
                 //[wer210] I modified here to remove _ITM_abortTransaction().
                 while (1) {
-                  __transaction_atomic {
+                  TM_BEGIN(myId); {
                     for (n = 0; n < numQuery; n++) {
                       long t = types[n];
                       long id = ids[n];
@@ -243,8 +243,8 @@ client_run (void* argPtr)
                                                    customerId, maxIds[RESERVATION_ROOM]);
                     }
                     if (done) break;
-                    else __transaction_cancel;
-                  } // TM_END
+                    else TM_RESTART();
+                  } TM_END(myId);
             }
                 break;
 
@@ -254,14 +254,14 @@ client_run (void* argPtr)
                 long customerId = random_generate(randomPtr) % queryRange + 1;
                 bool_t done = TRUE;
                 while (1) {
-                  __transaction_atomic {
+                  TM_BEGIN(myId); {
                     long bill = MANAGER_QUERY_CUSTOMER_BILL(managerPtr, customerId);
                     if (bill >= 0) {
                       done = done && MANAGER_DELETE_CUSTOMER(managerPtr, customerId);
                     }
                     if(done) break;
-                    else __transaction_cancel;
-                  }
+                    else TM_RESTART();
+                  } TM_END(myId);
                 }
                 break;
             }
@@ -279,7 +279,7 @@ client_run (void* argPtr)
                 }
                 bool_t done = TRUE;
                 while (1) {
-                  __transaction_atomic {
+                  TM_BEGIN(myId); {
                     for (n = 0; n < numUpdate; n++) {
                       long t = types[n];
                       long id = ids[n];
@@ -316,8 +316,8 @@ client_run (void* argPtr)
                       }
                     }
                   if (done) break;
-                  else __transaction_cancel;
-                  } // TM_END
+                  else TM_RESTART();
+                  } TM_END(myId);
                 }
                 break;
             }
