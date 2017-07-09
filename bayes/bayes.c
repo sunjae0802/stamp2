@@ -244,6 +244,7 @@ int main (int argc, char** argv)
     global_insertPenalty = global_params[PARAM_INSERT];
     global_maxNumEdgeLearned = global_params[PARAM_EDGE];
 
+    TM_STARTUP(numThread);
     thread_startup(numThread);
 
     printf("Random seed                = %li\n", randomSeed);
@@ -354,6 +355,7 @@ int main (int argc, char** argv)
 #endif
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return 0;
 }

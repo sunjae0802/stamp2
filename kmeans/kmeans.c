@@ -272,6 +272,7 @@ int main (int argc, char** argv)
     }
     free(line);
 
+    TM_STARTUP(nthreads);
     thread_startup(nthreads);
 
     /*
@@ -377,6 +378,7 @@ int main (int argc, char** argv)
     free(buf);
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return 0;
 }

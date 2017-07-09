@@ -281,6 +281,7 @@ int main (int argc, char** argv)
 
     parseArgs(argc, (char** const)argv);
 
+    TM_STARTUP(global_numThread);
     thread_startup(global_numThread);
     global_meshPtr = mesh_alloc();
     assert(global_meshPtr);
@@ -342,6 +343,7 @@ int main (int argc, char** argv)
      */
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return 0;
 }

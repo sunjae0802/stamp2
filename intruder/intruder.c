@@ -266,6 +266,7 @@ int main (int argc, char** argv)
     parseArgs(argc, (char** const)argv);
     long numThread = global_params[PARAM_THREAD];
 
+    TM_STARTUP(numThread);
     thread_startup(numThread);
 
     long percentAttack = global_params[PARAM_ATTACK];
@@ -357,6 +358,7 @@ int main (int argc, char** argv)
     dictionary_free(dictionaryPtr);
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return 0;
 }

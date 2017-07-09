@@ -195,6 +195,7 @@ int main (int argc, char** argv)
      */
     parseArgs(argc, (char** const)argv);
     long numThread = global_params[PARAM_THREAD];
+    TM_STARTUP(numThread);
     thread_startup(numThread);
     maze_t* mazePtr = maze_alloc();
     assert(mazePtr);
@@ -257,7 +258,7 @@ int main (int argc, char** argv)
     list_free(pathVectorListPtr);
 
     thread_shutdown();
-
+    TM_SHUTDOWN();
 
     return 0;
 }

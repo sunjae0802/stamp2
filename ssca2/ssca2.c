@@ -139,6 +139,7 @@ int main (int argc, char** argv)
 
     getUserParameters(argc, (char** const) argv);
 
+    TM_STARTUP(THREADS);
     thread_startup(THREADS);
 
     puts("");
@@ -544,6 +545,7 @@ int main (int argc, char** argv)
     free(SDGdata);
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return 0;
 }

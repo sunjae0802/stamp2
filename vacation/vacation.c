@@ -426,6 +426,7 @@ int main (int argc, char** argv)
     clients = initializeClients(managerPtr);
     assert(clients != NULL);
     long numThread = global_params[PARAM_CLIENTS];
+    TM_STARTUP(numThread);
     thread_startup(numThread);
 
     /* Run transactions */
@@ -464,6 +465,7 @@ int main (int argc, char** argv)
     fflush(stdout);
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return 0;
 }

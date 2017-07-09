@@ -196,6 +196,7 @@ int main (int argc, char** argv)
     long minNumSegment = global_params[PARAM_NUMBER];
     long numThread = global_params[PARAM_THREAD];
 
+    TM_STARTUP(numThread);
     thread_startup(numThread);
 
     random_t* randomPtr = random_alloc();
@@ -260,6 +261,7 @@ int main (int argc, char** argv)
     fflush(stdout);
 
     thread_shutdown();
+    TM_SHUTDOWN();
 
     return result;
 }
