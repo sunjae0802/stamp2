@@ -1,5 +1,5 @@
 # obj folder
-TMBUILD ?= seq
+TMBUILD ?= gpth
 
 # ======== Defines ========
 CC	:= gcc
@@ -7,17 +7,16 @@ CC	:= gcc
 CPPFLAGS += -I../lib -I../
 CPPFLAGS += 
 CFLAGS   += -Wall -Wextra -g
-CFLAGS   += -fgnu-tm
-CFLAGS   += -O2
+CFLAGS   += -O2 -std=gnu11
 
 LD	:= gcc
 LDFLAGS  += -lpthread
-LDFLAGS  += -litm
 LIBDEPS  += 
 
 # ======== Rules ========
 OBJDIR = ../build/$(TMBUILD)/$(PROG)/
 
+OBJS += lib_tmlib-$(TMBUILD).o
 _OBJS = $(patsubst %,$(OBJDIR)/%,$(OBJS))
 _PROG = $(OBJDIR)/$(PROG)
 
