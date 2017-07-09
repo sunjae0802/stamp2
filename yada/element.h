@@ -241,6 +241,7 @@ element_getEncroachedPtr (element_t* elementPtr);
  * =============================================================================
  */
 bool_t
+TM_SAFE
 element_isSkinny (element_t* elementPtr);
 
 
