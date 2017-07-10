@@ -2,15 +2,17 @@
 TMBUILD ?= gpth
 
 # ======== Defines ========
-CC	:= gcc
+CC	:= /cross-tools/bin/mips-unknown-linux-gnu-gcc
 #CPPFLAGS += -DNDEBUG
 CPPFLAGS += -I../lib -I../
 CPPFLAGS += 
 CFLAGS   += -Wall -Wextra -g
 CFLAGS   += -O2 -std=gnu11
+CFLAGS   += -static -mabi=32 -march=mips4
 
-LD	:= gcc
+LD	:= /cross-tools/bin/mips-unknown-linux-gnu-gcc
 LDFLAGS  += -lpthread
+LDFLAGS  +=  -static -mabi=32 -march=mips4
 LIBDEPS  += 
 
 # ======== Rules ========
