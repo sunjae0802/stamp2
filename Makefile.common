@@ -19,6 +19,7 @@ LIBDEPS  +=
 OBJDIR = ../build/$(TMBUILD)/$(PROG)/
 
 OBJS += lib_tmlib-$(TMBUILD).o
+OBJS += lib_htm.o
 _OBJS = $(patsubst %,$(OBJDIR)/%,$(OBJS))
 _PROG = $(OBJDIR)/$(PROG)
 
