@@ -9,7 +9,7 @@
 
 #define TM_BEGIN(_threadId)           tm_begin(_threadId, gp_tm_flock)
 #define TM_END(_threadId)             tm_end(_threadId, gp_tm_flock)
-#define TM_RESTART()                  {/* nothing */}
+#define TM_RESTART()                  tm_restart()
 
 #define TM_PURE                       /* nothing */
 #define TM_SAFE                       /* nothing */

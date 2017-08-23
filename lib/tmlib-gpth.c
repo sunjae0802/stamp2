@@ -104,6 +104,12 @@ tm_end(long threadId, pthread_spinlock_t* p_fallback_lock) {
     p_tm_thread->depth--;
 }
 
+void
+tm_restart() {
+    printf("[TMLIB] tm_restart not supported\n");
+    exit(EXIT_FAILURE);
+}
+
 #ifdef __cplusplus
 }
 #endif

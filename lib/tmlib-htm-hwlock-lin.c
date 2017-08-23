@@ -156,6 +156,11 @@ tm_end(long threadId, pthread_spinlock_t* p_fallback_lock __attribute__((unused)
 }
 
 void
+tm_restart() {
+    htm_abort(0xFF);
+}
+
+void
 tm_random_delay(long threadId) {
     tm_thread_t* p_tm_thread = gp_tm_threads + threadId;
     DELAY(16, &(p_tm_thread->htm_random_seed), 2);

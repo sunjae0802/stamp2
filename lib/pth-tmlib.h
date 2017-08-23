@@ -24,6 +24,9 @@ void
 tm_end(long threadId, pthread_spinlock_t* p_fallback_lock);
 
 void
+tm_restart();
+
+void
 tm_random_delay(long threadId);
 
 static inline int
