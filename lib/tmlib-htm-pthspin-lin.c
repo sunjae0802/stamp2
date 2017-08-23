@@ -64,7 +64,7 @@ tm_startup(size_t num_threads) {
 
     _Static_assert(sizeof(struct tm_thread) == CACHE_SIZE, "tm_thread");
     gp_tm_threads = (tm_thread_t*)aligned_alloc(CACHE_SIZE, num_threads * sizeof(tm_thread_t));
-    memset(gp_tm_threads, 0, sizeof(tm_thread_t));
+    memset(gp_tm_threads, 0, num_threads * sizeof(tm_thread_t));
 
     for(size_t threadId = 0; threadId < num_threads; ++threadId) {
         gp_tm_threads[threadId].myid = threadId;
