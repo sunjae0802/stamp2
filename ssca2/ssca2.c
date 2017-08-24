@@ -187,6 +187,11 @@ int main (int argc, char** argv)
     printf("\nTime taken for Scalable Data Generation is %9.6f sec.\n\n", time);
     printf("\n\tgenScalData() completed execution.\n");
 
+#ifndef USE_PARALLEL_DATA_GENERATION
+    /* XXX So that "Time = " doesn't include sequential data generation */
+    totalTime = 0;
+#endif
+
 
 #ifdef ENABLE_KERNEL1
 
