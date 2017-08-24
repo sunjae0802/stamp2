@@ -232,7 +232,7 @@ process ()
             PREGION_CLEARBAD(regionPtr);
             //[wer210] problematic function!
             numAdded = TMREGION_REFINE(regionPtr, elementPtr, meshPtr, &success);
-            if (success) break;
+            if (success) { TM_END(myId); break; }
             else TM_RESTART();
           } TM_END(myId);
         }
