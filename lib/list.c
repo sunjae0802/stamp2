@@ -74,6 +74,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include "list.h"
+#include "memory.h"
+#include "thread.h"
 #include "types.h"
 #include "tm.h"
 
@@ -162,7 +164,7 @@ TM_SAFE
 list_node_t*
 allocNode (void* dataPtr)
 {
-    list_node_t* nodePtr = (list_node_t*)malloc(sizeof(list_node_t));
+    list_node_t* nodePtr = (list_node_t*)MALLOC(sizeof(list_node_t));
     if (nodePtr == NULL) {
         return NULL;
     }
@@ -184,7 +186,7 @@ TM_SAFE
 list_t*
 list_alloc (TM_SAFE long (*compare)(const void*, const void*))
 {
-    list_t* listPtr = (list_t*)malloc(sizeof(list_t));
+    list_t* listPtr = (list_t*)MALLOC(sizeof(list_t));
     if (listPtr == NULL) {
         return NULL;
     }
@@ -211,7 +213,7 @@ TM_SAFE
 void
 freeNode (list_node_t* nodePtr)
 {
-    free(nodePtr);
+    FREE(nodePtr);
 }
 
 
@@ -240,7 +242,7 @@ list_free (  list_t* listPtr)
 {
     list_node_t* nextPtr = (list_node_t*)listPtr->head.nextPtr;
     freeList(nextPtr);
-    free(listPtr);
+    FREE(listPtr);
 }
 
 

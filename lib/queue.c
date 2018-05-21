@@ -73,6 +73,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "random.h"
+#include "memory.h"
+#include "thread.h"
 #include "tm.h"
 #include "types.h"
 #include "queue.h"
@@ -98,13 +100,13 @@ TM_SAFE
 queue_t*
 queue_alloc (  long initCapacity)
 {
-    queue_t* queuePtr = (queue_t*)malloc(sizeof(queue_t));
+    queue_t* queuePtr = (queue_t*)MALLOC(sizeof(queue_t));
 
     if (queuePtr) {
         long capacity = ((initCapacity < 2) ? 2 : initCapacity);
-        queuePtr->elements = (void**)malloc(capacity * sizeof(void*));
+        queuePtr->elements = (void**)MALLOC(capacity * sizeof(void*));
         if (queuePtr->elements == NULL) {
-            free(queuePtr);
+            FREE(queuePtr);
             return NULL;
         }
         queuePtr->pop      = capacity - 1;
@@ -124,8 +126,8 @@ TM_SAFE
 void
 queue_free (queue_t* queuePtr)
 {
-    free(queuePtr->elements);
-    free(queuePtr);
+    FREE(queuePtr->elements);
+    FREE(queuePtr);
 }
 
 
@@ -210,7 +212,7 @@ queue_push (queue_t* queuePtr, void* dataPtr)
     if (newPush == pop) {
 
         long newCapacity = capacity * QUEUE_GROWTH_FACTOR;
-        void** newElements = (void**)malloc(newCapacity * sizeof(void*));
+        void** newElements = (void**)MALLOC(newCapacity * sizeof(void*));
         if (newElements == NULL) {
             return FALSE;
         }
@@ -232,7 +234,7 @@ queue_push (queue_t* queuePtr, void* dataPtr)
             }
         }
 
-        free(elements);
+        FREE(elements);
         queuePtr->elements = newElements;
         queuePtr->pop      = newCapacity - 1;
         queuePtr->capacity = newCapacity;

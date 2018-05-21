@@ -77,6 +77,8 @@
 #include "coordinate.h"
 #include "element.h"
 #include "pair.h"
+#include "memory.h"
+#include "thread.h"
 #include "tm.h"
 #include "types.h"
 
@@ -373,7 +375,7 @@ TMelement_alloc (  coordinate_t* coordinates, long numCoordinate)
 {
     element_t* elementPtr;
 
-    elementPtr = (element_t*)malloc(sizeof(element_t));
+    elementPtr = (element_t*)MALLOC(sizeof(element_t));
     if (elementPtr) {
         long i;
         for (i = 0; i < numCoordinate; i++) {
@@ -404,7 +406,7 @@ void
 TMelement_free (  element_t* elementPtr)
 {
     TMLIST_FREE(elementPtr->neighborListPtr);
-    free(elementPtr);
+    FREE(elementPtr);
 }
 
 

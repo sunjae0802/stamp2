@@ -85,6 +85,7 @@
 #include <stdlib.h>
 #include <inttypes.h>
 #include "memory.h"
+#include "thread.h"
 #include "rbtree.h"
 #include "tm.h"
 
@@ -1051,7 +1052,7 @@ TM_SAFE
 rbtree_t*
 rbtree_alloc (long (*compare)(const void*, const void*))
 {
-    rbtree_t* n = (rbtree_t* )malloc(sizeof(*n));
+    rbtree_t* n = (rbtree_t* )MALLOC(sizeof(*n));
     if (n) {
         n->compare = (compare ? compare : &compareKeysDefault);
         n->root = NULL;
@@ -1067,7 +1068,7 @@ rbtree_alloc (long (*compare)(const void*, const void*))
 void
 releaseNode (node_t* n)
 {
-  free(n);
+  FREE(n);
 }
 
 
@@ -1096,7 +1097,7 @@ void
 rbtree_free (rbtree_t* r)
 {
     freeTreeNode(r->root);
-    free(r);
+    FREE(r);
 }
 
 
@@ -1109,7 +1110,7 @@ rbtree_free (rbtree_t* r)
 node_t*
 getNode ()
 {
-    node_t* n = (node_t*)malloc(sizeof(*n));
+    node_t* n = (node_t*)MALLOC(sizeof(*n));
     return n;
 }
 

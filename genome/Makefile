@@ -14,6 +14,7 @@ LIBSRCS += \
 	pair.c \
 	random.c \
 	list.c \
+	memory.c \
 	mt19937ar.c \
 	thread.c \
 	vector.c

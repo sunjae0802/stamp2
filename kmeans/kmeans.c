@@ -106,6 +106,7 @@
 #include "cluster.h"
 #include "normal.h"
 #include "common.h"
+#include "memory.h"
 #include "thread.h"
 #include "tm.h"
 #include "util.h"
@@ -273,6 +274,7 @@ int main (int argc, char** argv)
     free(line);
 
     TM_STARTUP(nthreads);
+    MEMORY_STARTUP(nthreads);
     thread_startup(nthreads);
 
     /*

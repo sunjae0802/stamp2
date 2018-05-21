@@ -72,6 +72,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tm.h"
+#include "memory.h"
+#include "thread.h"
 #include "types.h"
 #include "utility.h"
 #include "vector.h"
@@ -92,12 +94,12 @@ vector_alloc (long initCapacity)
     vector_t* vectorPtr;
     long capacity = MAX(initCapacity, 1);
 
-    vectorPtr = (vector_t*)malloc(sizeof(vector_t));
+    vectorPtr = (vector_t*)MALLOC(sizeof(vector_t));
 
     if (vectorPtr != NULL) {
         vectorPtr->size = 0;
         vectorPtr->capacity = capacity;
-        vectorPtr->elements = (void**)malloc(capacity * sizeof(void*));
+        vectorPtr->elements = (void**)MALLOC(capacity * sizeof(void*));
         if (vectorPtr->elements == NULL) {
             return NULL;
         }
@@ -115,8 +117,8 @@ TM_SAFE
 void
 vector_free (vector_t* vectorPtr)
 {
-    free(vectorPtr->elements);
-    free(vectorPtr);
+    FREE(vectorPtr->elements);
+    FREE(vectorPtr);
 }
 
 
@@ -149,7 +151,7 @@ vector_pushBack (vector_t* vectorPtr, void* dataPtr)
     if (vectorPtr->size == vectorPtr->capacity) {
         long i;
         long newCapacity = vectorPtr->capacity * 2;
-        void** newElements = (void**)malloc(newCapacity * sizeof(void*));
+        void** newElements = (void**)MALLOC(newCapacity * sizeof(void*));
         if (newElements == NULL) {
             return FALSE;
         }
@@ -157,7 +159,7 @@ vector_pushBack (vector_t* vectorPtr, void* dataPtr)
         for (i = 0; i < vectorPtr->size; i++) {
             newElements[i] = vectorPtr->elements[i];
         }
-        free(vectorPtr->elements);
+        FREE(vectorPtr->elements);
         vectorPtr->elements = newElements;
     }
     vectorPtr->elements[vectorPtr->size++] = dataPtr;
@@ -261,11 +263,11 @@ vector_copy (vector_t* dstVectorPtr, vector_t* srcVectorPtr)
     long srcSize = srcVectorPtr->size;
     if (dstCapacity < srcSize) {
         long srcCapacity = srcVectorPtr->capacity;
-        void** elements = (void**)malloc(srcCapacity * sizeof(void*));
+        void** elements = (void**)MALLOC(srcCapacity * sizeof(void*));
         if (elements == NULL)
             return FALSE;
 
-        free(dstVectorPtr->elements);
+        FREE(dstVectorPtr->elements);
         dstVectorPtr->elements = elements;
         dstVectorPtr->capacity = srcCapacity;
     }

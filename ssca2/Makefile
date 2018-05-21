@@ -13,6 +13,7 @@ SRCS += \
 	ssca2.c
 
 LIBSRCS += \
+	memory.c \
 	mt19937ar.c \
 	random.c \
 	thread.c

@@ -74,6 +74,7 @@
 #include "data.h"
 #include "learner.h"
 #include "net.h"
+#include "memory.h"
 #include "thread.h"
 #include "timer.h"
 #include "tm.h"
@@ -245,6 +246,7 @@ int main (int argc, char** argv)
     global_maxNumEdgeLearned = global_params[PARAM_EDGE];
 
     TM_STARTUP(numThread);
+    MEMORY_STARTUP(numThread);
     thread_startup(numThread);
 
     printf("Random seed                = %li\n", randomSeed);

@@ -73,15 +73,8 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "memory.h"
+#include "thread.h"
 #include "types.h"
-
-/* We want to use enum bool_t */
-#ifdef FALSE
-#  undef FALSE
-#endif
-#ifdef TRUE
-#  undef TRUE
-#endif
 
 
 #define PADDING_SIZE 8
@@ -121,14 +114,14 @@ allocBlock (size_t capacity)
 
     assert(capacity > 0);
 
-    blockPtr = (block_t*)SEQ_MALLOC(sizeof(block_t));
+    blockPtr = (block_t*)malloc(sizeof(block_t));
     if (blockPtr == NULL) {
         return NULL;
     }
 
     blockPtr->size = 0;
     blockPtr->capacity = capacity;
-    blockPtr->contents = (char*)SEQ_MALLOC(capacity / sizeof(char) + 1);
+    blockPtr->contents = (char*)malloc(capacity / sizeof(char) + 1);
     if (blockPtr->contents == NULL) {
         return NULL;
     }
@@ -145,8 +138,8 @@ allocBlock (size_t capacity)
 static void
 freeBlock (block_t* blockPtr)
 {
-    SEQ_FREE(blockPtr->contents);
-    SEQ_FREE(blockPtr);
+    free(blockPtr->contents);
+    free(blockPtr);
 }
 
 
@@ -160,7 +153,7 @@ allocPool (size_t initBlockCapacity, long blockGrowthFactor)
 {
     pool_t* poolPtr;
 
-    poolPtr = (pool_t*)SEQ_MALLOC(sizeof(pool_t));
+    poolPtr = (pool_t*)malloc(sizeof(pool_t));
     if (poolPtr == NULL) {
         return NULL;
     }
@@ -204,7 +197,7 @@ static void
 freePool (pool_t* poolPtr)
 {
     freeBlocks(poolPtr->blocksPtr);
-    SEQ_FREE(poolPtr);
+    free(poolPtr);
 }
 
 
@@ -220,12 +213,12 @@ memory_init (long numThread, size_t initBlockCapacity, long blockGrowthFactor)
 
     assert(numThread > 0);
 
-    global_memoryPtr = (memory_t*)SEQ_MALLOC(sizeof(memory_t));
+    global_memoryPtr = (memory_t*)malloc(sizeof(memory_t));
     if (global_memoryPtr == NULL) {
         return FALSE;
     }
 
-    global_memoryPtr->pools = (pool_t**)SEQ_MALLOC(numThread * sizeof(pool_t*));
+    global_memoryPtr->pools = (pool_t**)malloc(numThread * sizeof(pool_t*));
     if (global_memoryPtr->pools == NULL) {
         return FALSE;
     }
@@ -256,8 +249,8 @@ memory_destroy (void)
     for (i = 0; i < numThread; i++) {
         freePool(global_memoryPtr->pools[i]);
     }
-    SEQ_FREE(global_memoryPtr->pools);
-    SEQ_FREE(global_memoryPtr);
+    free(global_memoryPtr->pools);
+    free(global_memoryPtr);
 }
 
 

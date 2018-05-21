@@ -77,6 +77,8 @@
 #include "map.h"
 #include "packet.h"
 #include "queue.h"
+#include "memory.h"
+#include "thread.h"
 #include "tm.h"
 #include "types.h"
 
@@ -106,7 +108,7 @@ decoder_alloc ()
 {
     decoder_t* decoderPtr;
 
-    decoderPtr = (decoder_t*)malloc(sizeof(decoder_t));
+    decoderPtr = (decoder_t*)MALLOC(sizeof(decoder_t));
     if (decoderPtr) {
         decoderPtr->fragmentedMapPtr = MAP_ALLOC(NULL, NULL);
         assert(decoderPtr->fragmentedMapPtr);
@@ -127,7 +129,7 @@ decoder_free (decoder_t* decoderPtr)
 {
     queue_free(decoderPtr->decodedQueuePtr);
     MAP_FREE(decoderPtr->fragmentedMapPtr);
-    free(decoderPtr);
+    FREE(decoderPtr);
 }
 
 
@@ -253,7 +255,7 @@ TMdecoder_process (  decoder_t* decoderPtr, char* bytes, long numByte)
             i++;
           }
 
-          char* data = (char*)malloc(numByte + 1);
+          char* data = (char*)MALLOC(numByte + 1);
           assert(data);
           data[numByte] = '\0';
           char* dst = data;
@@ -277,7 +279,7 @@ TMdecoder_process (  decoder_t* decoderPtr, char* bytes, long numByte)
           }
           assert(dst == data + numByte);
 
-          decoded_t* decodedPtr = (decoded_t*)malloc(sizeof(decoded_t));
+          decoded_t* decodedPtr = (decoded_t*)MALLOC(sizeof(decoded_t));
           assert(decodedPtr);
           decodedPtr->flowId = flowId;
           decodedPtr->data = data;
@@ -301,12 +303,12 @@ TMdecoder_process (  decoder_t* decoderPtr, char* bytes, long numByte)
           return ERROR_FRAGMENTID;
         }
 
-        char* data = (char*)malloc(length + 1);
+        char* data = (char*)MALLOC(length + 1);
         assert(data);
         data[length] = '\0';
         memcpy(data, packetPtr->data, length);
 
-        decoded_t* decodedPtr = (decoded_t*)malloc(sizeof(decoded_t));
+        decoded_t* decodedPtr = (decoded_t*)MALLOC(sizeof(decoded_t));
         assert(decodedPtr);
         decodedPtr->flowId = flowId;
         decodedPtr->data = data;
@@ -336,7 +338,7 @@ TMdecoder_getComplete (  decoder_t* decoderPtr, long* decodedFlowIdPtr)
     if (decodedPtr) {
         *decodedFlowIdPtr = decodedPtr->flowId;
         data = decodedPtr->data;
-        free(decodedPtr);
+        FREE(decodedPtr);
     } else {
         *decodedFlowIdPtr = -1;
         data = NULL;

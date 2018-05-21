@@ -78,6 +78,7 @@
 #include "dictionary.h"
 #include "packet.h"
 #include "stream.h"
+#include "memory.h"
 #include "thread.h"
 #include "timer.h"
 #include "tm.h"
@@ -239,7 +240,7 @@ processPackets (void* argPtr)
         //TMprint("3.\n");
         if (data) {
             error_t error = PDETECTOR_PROCESS(detectorPtr, data);
-            free(data);
+            FREE(data);
             if (error) {
                 bool_t status = PVECTOR_PUSHBACK(errorVectorPtr,
                                                  (void*)decodedFlowId);
@@ -267,6 +268,7 @@ int main (int argc, char** argv)
     long numThread = global_params[PARAM_THREAD];
 
     TM_STARTUP(numThread);
+    MEMORY_STARTUP(numThread);
     thread_startup(numThread);
 
     long percentAttack = global_params[PARAM_ATTACK];

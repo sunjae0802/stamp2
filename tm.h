@@ -7,12 +7,18 @@
 #define TM_STARTUP(numThread)         tm_startup(numThread)
 #define TM_SHUTDOWN()                 tm_shutdown()
 
+#define MEMORY_STARTUP(numThread)     memory_init(numThread, 16*1024*1024, 0);
+#define MEMORY_SHUTDOWN()             memory_destroy()
+
 #define TM_BEGIN(_threadId)           tm_begin(_threadId, gp_tm_flock)
 #define TM_END(_threadId)             tm_end(_threadId, gp_tm_flock)
 #define TM_RESTART()                  tm_restart()
 
 #define TM_PURE                       /* nothing */
 #define TM_SAFE                       /* nothing */
+
+#define MALLOC(size)                  memory_get(thread_getId(), size)
+#define FREE(ptr)                     /* nothing */
 
 #define TM_SHARED_READ(var)           var
 #define TM_SHARED_READ_P(var)         var

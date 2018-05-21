@@ -76,6 +76,7 @@
 #include "list.h"
 #include "maze.h"
 #include "router.h"
+#include "memory.h"
 #include "thread.h"
 #include "timer.h"
 #include "types.h"
@@ -196,6 +197,7 @@ int main (int argc, char** argv)
     parseArgs(argc, (char** const)argv);
     long numThread = global_params[PARAM_THREAD];
     TM_STARTUP(numThread);
+    MEMORY_STARTUP(numThread);
     thread_startup(numThread);
     maze_t* mazePtr = maze_alloc();
     assert(mazePtr);

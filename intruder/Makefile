@@ -16,6 +16,7 @@ LIBSRCS += \
 	queue.c \
 	random.c \
 	rbtree.c \
+	memory.c \
 	thread.c \
 	vector.c
 

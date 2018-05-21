@@ -421,11 +421,13 @@ int main (int argc, char** argv)
 
     /* Initialization */
     parseArgs(argc, (char** const)argv);
+    long numThread = global_params[PARAM_CLIENTS];
+    MEMORY_STARTUP(numThread);
+
     managerPtr = initializeManager();
     assert(managerPtr != NULL);
     clients = initializeClients(managerPtr);
     assert(clients != NULL);
-    long numThread = global_params[PARAM_CLIENTS];
     TM_STARTUP(numThread);
     thread_startup(numThread);
 

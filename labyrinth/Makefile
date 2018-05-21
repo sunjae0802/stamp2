@@ -9,6 +9,7 @@ SRCS += \
 
 LIBSRCS += \
 	list.c \
+	memory.c \
 	mt19937ar.c \
 	pair.c \
 	queue.c \

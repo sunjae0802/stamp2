@@ -89,6 +89,8 @@ using std::size_t;
 #endif
 
 #include "avltree.h"
+#include "memory.h"
+#include "thread.h"
 #include "utility.h"
 #include "tm.h"
 
@@ -199,7 +201,7 @@ TM_SAFE
 jsw_avlnode_t*
 new_node ( jsw_avltree_t *tree, void *data )
 {
-  jsw_avlnode_t *rn = (jsw_avlnode_t *)malloc ( sizeof *rn );
+  jsw_avlnode_t *rn = (jsw_avlnode_t *)MALLOC ( sizeof *rn );
 
   if ( rn == NULL )
     return NULL;
@@ -227,7 +229,7 @@ jsw_avltree_t *jsw_avlnew ( cmp_f cmp, dup_f dup, rel_f rel )
 jsw_avltree_t *jsw_avlnew ( cmp_f cmp )
 #endif /* ! USE_DUP_AND_REL */
 {
-  jsw_avltree_t *rt = (jsw_avltree_t *)malloc( sizeof *rt );
+  jsw_avltree_t *rt = (jsw_avltree_t *)MALLOC( sizeof *rt );
 
   if ( rt == NULL )
     return NULL;
@@ -262,7 +264,7 @@ void jsw_avldelete ( jsw_avltree_t *tree )
 #ifdef USE_DUP_AND_REL
       tree->rel ( it->data );
 #endif /* USE_DUP_AND_REL */
-      free( it );
+      FREE( it );
     }
     else {
       /* Rotate right */
@@ -272,7 +274,7 @@ void jsw_avldelete ( jsw_avltree_t *tree )
     }
     it = save;
   }
-  free( tree );
+  FREE( tree );
 }
 
 
@@ -410,7 +412,7 @@ jsw_avlerase ( jsw_avltree_t *tree, void *data )
 #ifdef USE_DUP_AND_REL
       tree->rel ( it->data );
 #endif /* USE_DUP_AND_REL */
-      free(it);
+      FREE(it);
     }
     else {
       /* Find the inorder successor */
@@ -438,7 +440,7 @@ jsw_avlerase ( jsw_avltree_t *tree, void *data )
 #ifdef USE_DUP_AND_REL
       tree->rel ( heir->data );
 #endif /* USE_DUP_AND_REL */
-      free( heir );
+      FREE( heir );
     }
 
     /* Walk back up the search path */
@@ -481,12 +483,12 @@ jsw_avlsize ( jsw_avltree_t *tree )
 ///////////////////////////////////////////////////////////////////
 jsw_avltrav_t *jsw_avltnew ( void )
 {
-  return (jsw_avltrav_t *) malloc ( sizeof ( jsw_avltrav_t ) );
+  return (jsw_avltrav_t *) MALLOC ( sizeof ( jsw_avltrav_t ) );
 }
 
 void jsw_avltdelete ( jsw_avltrav_t *trav )
 {
-  free ( trav );
+  FREE ( trav );
 }
 
 /*

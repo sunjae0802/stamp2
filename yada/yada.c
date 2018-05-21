@@ -77,6 +77,7 @@
 #include "list.h"
 #include "mesh.h"
 #include "heap.h"
+#include "memory.h"
 #include "thread.h"
 #include "timer.h"
 #include "tm.h"
@@ -282,6 +283,7 @@ int main (int argc, char** argv)
     parseArgs(argc, (char** const)argv);
 
     TM_STARTUP(global_numThread);
+    MEMORY_STARTUP(global_numThread);
     thread_startup(global_numThread);
     global_meshPtr = mesh_alloc();
     assert(global_meshPtr);

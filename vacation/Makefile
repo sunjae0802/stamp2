@@ -10,6 +10,7 @@ SRCS += \
 LIBSRCS += \
 	list.c \
 	pair.c \
+	memory.c \
 	mt19937ar.c \
 	random.c \
 	rbtree.c \

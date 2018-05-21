@@ -11,6 +11,7 @@ SRCS += \
 LIBSRCS += \
 	bitmap.c \
 	list.c \
+	memory.c \
 	mt19937ar.c \
 	queue.c \
 	random.c \

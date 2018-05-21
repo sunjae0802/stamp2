@@ -78,6 +78,7 @@
 #include "random.h"
 #include "segments.h"
 #include "sequencer.h"
+#include "memory.h"
 #include "thread.h"
 #include "timer.h"
 #include "tm.h"
@@ -197,6 +198,7 @@ int main (int argc, char** argv)
     long numThread = global_params[PARAM_THREAD];
 
     TM_STARTUP(numThread);
+    MEMORY_STARTUP(numThread);
     thread_startup(numThread);
 
     random_t* randomPtr = random_alloc();

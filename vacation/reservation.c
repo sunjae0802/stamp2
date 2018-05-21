@@ -96,7 +96,7 @@ reservation_info_alloc (  reservation_type_t type, long id, long price)
 {
     reservation_info_t* reservationInfoPtr;
 
-    reservationInfoPtr = (reservation_info_t*)malloc(sizeof(reservation_info_t));
+    reservationInfoPtr = (reservation_info_t*)MALLOC(sizeof(reservation_info_t));
     if (reservationInfoPtr != NULL) {
         reservationInfoPtr->type = type;
         reservationInfoPtr->id = id;
@@ -114,7 +114,7 @@ reservation_info_alloc (  reservation_type_t type, long id, long price)
 TM_SAFE void
 reservation_info_free (  reservation_info_t* reservationInfoPtr)
 {
-    free(reservationInfoPtr);
+    FREE(reservationInfoPtr);
 }
 
 
@@ -184,7 +184,7 @@ reservation_alloc (long id, long numTotal, long price, bool_t* success)
 {
     reservation_t* reservationPtr;
 
-    reservationPtr = (reservation_t*)malloc(sizeof(reservation_t));
+    reservationPtr = (reservation_t*)MALLOC(sizeof(reservation_t));
     if (reservationPtr != NULL) {
         reservationPtr->id = id;
         reservationPtr->numUsed = 0;
@@ -321,7 +321,7 @@ reservation_compare (reservation_t* aPtr, reservation_t* bPtr)
 TM_SAFE void
 reservation_free (reservation_t* reservationPtr)
 {
-    free(reservationPtr);
+    FREE(reservationPtr);
 }
 
 

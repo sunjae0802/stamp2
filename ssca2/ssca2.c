@@ -75,6 +75,7 @@
 #include "getStartLists.h"
 #include "getUserParameters.h"
 #include "globals.h"
+#include "memory.h"
 #include "timer.h"
 #include "thread.h"
 #include "tm.h"
@@ -140,6 +141,7 @@ int main (int argc, char** argv)
     getUserParameters(argc, (char** const) argv);
 
     TM_STARTUP(THREADS);
+    MEMORY_STARTUP(THREADS);
     thread_startup(THREADS);
 
     puts("");

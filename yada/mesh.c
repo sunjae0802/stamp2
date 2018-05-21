@@ -77,6 +77,8 @@
 #include "list.h"
 #include "map.h"
 #include "mesh.h"
+#include "memory.h"
+#include "thread.h"
 #include "queue.h"
 #include "random.h"
 #include "set.h"
@@ -100,7 +102,7 @@ struct mesh {
 mesh_t*
 mesh_alloc ()
 {
-    mesh_t* meshPtr = (mesh_t*)malloc(sizeof(mesh_t));
+    mesh_t* meshPtr = (mesh_t*)MALLOC(sizeof(mesh_t));
 
     if (meshPtr) {
         meshPtr->rootElementPtr = NULL;
@@ -124,7 +126,7 @@ mesh_free (mesh_t* meshPtr)
 {
     queue_free(meshPtr->initBadQueuePtr);
     SET_FREE(meshPtr->boundarySetPtr);
-    free(meshPtr);
+    FREE(meshPtr);
 }
 
 
@@ -328,7 +330,7 @@ mesh_read (mesh_t* meshPtr, char* fileNamePrefix)
     sscanf(inputBuff, "%li %li", &numEntry, &numDimension);
     assert(numDimension == 2); /* must be 2-D */
     numCoordinate = numEntry + 1; /* numbering can start from 1 */
-    coordinates = (coordinate_t*)malloc(numCoordinate * sizeof(coordinate_t));
+    coordinates = (coordinate_t*)MALLOC(numCoordinate * sizeof(coordinate_t));
     assert(coordinates);
     for (i = 0; i < numEntry; i++) {
         long id;
@@ -415,7 +417,7 @@ mesh_read (mesh_t* meshPtr, char* fileNamePrefix)
     numElement += numEntry;
     fclose(inputFile);
 
-    free(coordinates);
+    FREE(coordinates);
     MAP_FREE(edgeMapPtr);
 
     return numElement;
