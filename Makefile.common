@@ -6,7 +6,7 @@ CC	:= /cross-tools/bin/mips-unknown-linux-gnu-gcc
 #CPPFLAGS += -DNDEBUG
 CPPFLAGS += -I../lib -I../
 CPPFLAGS += 
-CFLAGS   += -Wall -Wextra -g
+CFLAGS   += -Wall -Wextra -g -Wno-sign-compare -Wno-unused-parameter
 CFLAGS   += -O2 -std=gnu11
 CFLAGS   += -static -mabi=32 -march=mips4
 
