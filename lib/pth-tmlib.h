@@ -29,6 +29,9 @@ tm_restart();
 void
 tm_random_delay(long threadId);
 
+void 
+tm_log(int32_t arg);
+
 static inline int
 pthread_spin_test(pthread_spinlock_t* p_spinlock) {
     volatile uint32_t* p_spin = (volatile uint32_t*)(p_spinlock);

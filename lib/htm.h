@@ -29,6 +29,8 @@ htm_test() {
     return htm_meta(0, 0);
 }
 
+int tmlib_interrupt(int arg1, unsigned int arg2);
+
 /////////////////////////////////////////////
 // HTM Sstart return value tests
 /////////////////////////////////////////////
@@ -73,6 +75,13 @@ htm_capacity_abort(uint32_t ret) {
 static inline uint32_t
 htm_begin_nacked(uint32_t ret) {
     return (ret & 0xFF) == 2;
+}
+
+static inline unsigned int INTR_TYPE_MASK(unsigned int arg1) {
+    return arg1 & (0xFF);
+}
+static inline unsigned int INTR_TID_MASK(unsigned int arg1) {
+    return arg1 >> 8;
 }
 
 #ifdef __cplusplus

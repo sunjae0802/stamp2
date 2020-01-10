@@ -32,6 +32,8 @@
 #define TM_LOCAL_WRITE_P(var, val)    var = val
 #define TM_LOCAL_WRITE_F(var, val)    var = val
 
+#define TM_LOG(_arg)                  tm_log(_arg)
+
 /* Indirect function call management */
 /* In STAMP applications, it is safe to use transaction_pure */
 //#define TM_IFUNC_DECL                 __attribute__((transaction_pure))
